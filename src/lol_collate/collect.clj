@@ -8,7 +8,7 @@
 (defmacro wcar* [& body] `(car/wcar conn ~@body))
 
 (def api-root "https://prod.api.pvp.net/api/lol/na/v1.1/")
-(def api-key nil)
+(def api-key (atom nil))
 
 (def resolution 43200) ; update a summoner no more than once every 12 hours
 (def call-delay 1200) ; delay between API calls
@@ -26,7 +26,7 @@
   "Wrapper for client/get to ease data collection."
   [type id & {:keys [query-params]}]
   (:body (client/get (make-url type id)
-                     {:query-params (merge {:api_key api-key} query-params)
+                     {:query-params (merge {:api_key @api-key} query-params)
                       :as :json})))
 
 (defn get-fellow-summoners
